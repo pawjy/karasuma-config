@@ -1,6 +1,7 @@
 package Karasuma::Config::JSON;
 use strict;
 use warnings;
+our $VERSION = '1.0';
 use Path::Class;
 use Encode;
 use MIME::Base64;

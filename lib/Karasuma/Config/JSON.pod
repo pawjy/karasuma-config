@@ -1,0 +1,135 @@
+=head1 NAME
+
+Karasuma::Config::JSON - A JSON-based application configuration loader
+
+=head1 SYNOPSIS
+
+  use Karasuma::Config::JSON;
+  use Path::Class;
+  
+  $json_f = file("config.json");
+  $config = Karasuma::Config::JSON->new_from_json_f($json_f);
+  $config->base_d(dir("config/data"));
+  warn $config->get_text("hoge");
+  warn $config->get_file_text("fuga");
+
+=head1 DESCRIPTION
+
+The C<Karasuma::Config::JSON> module is an application configuration
+loader, which reads JSON file and extracts values written directly or
+indirectly in the file.
+
+=head1 METHODS
+
+=over 4
+
+=item $config = Karasuma::Config::JSON->new_from_json_f($f)
+
+Create a new instance of the configuration loader with specified JSON
+file.  The argument to the method must be a L<Path::Class::File>
+object for the JSON file.
+
+=item $config->base_d($d)
+
+Set the base directory for the indirect configuration values.  The
+argument to the method must be a L<Path::Class::Dir> object for the
+directory.
+
+=item $config = Karasuma::Config::JSON->new_from_env
+
+Create a new instance of the configuration loader using environment
+variables.  Two environment variable must be set before the invocation
+of the method.  The C<KARASUMA_CONFIG_JSON> variable identifies the
+JSON file (same as the argument to the C<new_from_json_f> method).
+The C<KARASUMA_CONFIG_FILE_DIR_NAME> variable identifies the base
+directory (same as the argument to the C<base_d> method).
+
+=item $value = $config->get_text($key)
+
+Return the textual value in the JSON file with the specified key.  If
+the JSON file contains the object which has the name/value pair whose
+name is the argument to the method, its value is returned.  Otherwise,
+the C<undef> value is returned.
+
+=item $value = $config->get_file_text($key)
+
+Return the textual value in the file whose name is specified in the
+JSON file with the specified key.  If the JSON file contains the
+object which has the name/value pair whose name is the argument to the
+method, and if resolving the value as the file name relative to the
+base directory (specified by the C<base_d> method) results in a file,
+then the content of the file is returned by interpreting it as a UTF-8
+encoded text.  Otherwise, the C<undef> value is returned.
+
+=item $value = $config->get_file_base64_text($key)
+
+Return the textual value in the Base64-encoded file whose name is
+specified in the JSON file with the specified key.  If the JSON file
+contains the object which has the name/value pair whose name is the
+argument to the method, and if resolving the value as the file name
+relative to the base directory (specified by the C<base_d> method)
+results in a file, then the content of the file is returned by
+interpreting it as a Base64-encoded UTF-8 text.  Otherwise, the
+C<undef> value is returned.
+
+=item $value = $config->get_file_json($key)
+
+Return the JSON-decoded data structure in the file whose name is
+specified in the JSON file with the specified key.  If the JSON file
+contains the object which has the name/value pair whose name is the
+argument to the method, and if resolving the value as the file name
+relative to the base directory (specified by the C<base_d> method)
+results in a file, then the content of the file is returned by
+interpreting it as a JSON-encoded data.  Otherwise, the C<undef> value
+is returned.
+
+=item $value = $config->get_file_json_base64values($key)
+
+Return the JSON-decoded pairs of names and Base64-decoded values in
+the file whose name is specified in the JSON file with the specified
+key.  If the JSON file contains the object which has the name/value
+pair whose name is the argument to the method, and if resolving the
+value as the file name relative to the base directory (specified by
+the C<base_d> method) results in a file, then the content of the file
+is returned by interpreting it as a JSON-encoded name/value pairs
+where values are encoded in Base64.  Otherwise, the C<undef> value is
+returned.
+
+=back
+
+=head1 EXAMPLE
+
+See C<t/config-json.t> and C<t/data/test1.json>.
+
+=head1 DEPENDENCY
+
+The module supports Perl 5.8 or later.  Following modules are
+required:
+
+L<Encode>, L<MIME::Base64>.
+
+L<Path::Class>.
+
+L<JSON::Functions::XS>
+<https://github.com/wakaba/perl-json-functions-xs> and L<JSON::XS>.
+
+=head1 DEVELOPMENT
+
+Latest version of the module is available from
+<https://github.com/wakaba/karasuma-config>.
+
+Tests are run at Travis CI
+<http://travis-ci.org/wakaba/karasuma-config>.
+
+=head1 AUTHOR
+
+Wakaba <wakabatan@hatena.ne.jp>.
+
+=head1 LICENSE
+
+Copyright 2012 Hatena <http://www.hatena.ne.jp/>.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
