@@ -4,20 +4,12 @@ use warnings;
 our $VERSION = '1.0';
 use Path::Class;
 
-sub new {
-    my $class = shift;
-    return bless {@_}, $class;
-}
-
-sub status_base_d {
-    if (@_ > 1) {
-        $_[0]->{status_base_d} = $_[1];
-    }
-    return $_[0]->{status_base_d} ||= file(__FILE__)->dir->parent->parent->parent->subdir('local')->subdir('state');
+sub new_from_status_d {
+    return bless {status_d => $_[1]}, $_[0];
 }
 
 sub status_d {
-    return $_[0]->{status_d} ||= $_[0]->status_base_d->subdir($ENV{KARASUMA_CONFIG_SERVER_STATUS_KEY} ? ($ENV{KARASUMA_CONFIG_SERVER_STATUS_KEY}) : ());
+    return $_[0]->{status_d};
 }
 
 sub up_f {

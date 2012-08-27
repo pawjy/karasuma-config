@@ -11,11 +11,14 @@ use warnings;
 use Karasuma::Config::ServerStatus;
 use Test::X1;
 use Test::More;
+use File::Temp;
+use Path::Class;
 
 test {
     my $c = shift;
 
-    my $config = Karasuma::Config::ServerStatus->new;
+    my $d = dir(File::Temp->newdir);
+    my $config = Karasuma::Config::ServerStatus->new_from_status_d($d);
     $config->reset;
     ok !$config->is_available;
 
