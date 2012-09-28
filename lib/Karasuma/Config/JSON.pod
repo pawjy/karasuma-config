@@ -44,6 +44,13 @@ JSON file (same as the argument to the C<new_from_json_f> method).
 The C<KARASUMA_CONFIG_FILE_DIR_NAME> variable identifies the base
 directory (same as the argument to the C<base_d> method).
 
+=item $config = Karasuma::Config::JSON->new_from_config_data($hash)
+
+Create a new instance of the configuration loader using the Perl hash
+corresponding to the content of the JSON configuration file.  This
+method would be useful when you have already parsed JSON data or for
+test scripts.
+
 =item $value = $config->get_text($key)
 
 Return the textual value in the JSON file with the specified key.  If

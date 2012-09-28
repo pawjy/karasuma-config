@@ -1,7 +1,7 @@
 package Karasuma::Config::JSON;
 use strict;
 use warnings;
-our $VERSION = '1.0';
+our $VERSION = '2.0';
 use Path::Class;
 use Encode;
 use MIME::Base64;
@@ -18,6 +18,10 @@ sub new_from_env {
 
 sub new_from_json_f {
     return bless {json_f => $_[1]}, $_[0];
+}
+
+sub new_from_config_data {
+    return bless {config_data => $_[1]}, $_[0];
 }
 
 sub base_d {

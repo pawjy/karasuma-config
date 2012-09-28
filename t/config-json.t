@@ -41,6 +41,25 @@ test {
     eq_or_diff $config->get_file_json_base64values('axxa'), undef;
 
     done $c;
-};
+} n => 10, name => 'methods';
+
+test {
+    my $c = shift;
+
+    my $config = Karasuma::Config::JSON->new_from_config_data({
+        hoge => 'abc',
+        aaa => 'foo',
+        'ab json' => 'abaa.json',
+    });
+    $config->base_d(file(__FILE__)->dir->subdir('data')->subdir('test1'));
+    is $config->get_text('hoge'), 'abc';
+    is $config->get_text('aaa'), 'foo';
+    eq_or_diff $config->get_file_json('ab json'), {
+        hoge => ['aaa', "\x{4e00}"],
+        fuga => 124,
+    };
+
+    done $c;
+} n => 3, name => 'new_from_config_data';
 
 run_tests;
