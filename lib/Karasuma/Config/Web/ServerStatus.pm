@@ -12,7 +12,8 @@ sub process {
             not defined $path->[2]) {
         my $action = Karasuma::Config::ServerStatus->new_from_status_d($status_d);
         if ($action->is_available) {
-            return $app->send_plain_text('200 OK');
+            $app->send_plain_text('200 OK');
+            return $app->throw;
         } else {
             return $app->throw_error(503, reason_phrase => 'Server is up but is under maintenance');
         }
