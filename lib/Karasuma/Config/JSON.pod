@@ -120,17 +120,15 @@ L<Path::Class>.
 L<JSON::Functions::XS>
 <https://github.com/wakaba/perl-json-functions-xs> and L<JSON::XS>.
 
-=head1 DEVELOPMENT
-
-Latest version of the module is available from
-<https://github.com/wakaba/karasuma-config>.
-
-Tests are run at Travis CI
-<http://travis-ci.org/wakaba/karasuma-config>.
-
 =head1 AUTHOR
 
-Wakaba <wakabatan@hatena.ne.jp>.
+Wakaba <wakaba@suikawiki.org>.
+
+=head1 History
+
+This repository was located at
+<https://github.com/wakaba/karasuma-config> until April 17, 2022, then
+transferred to <https://github.com/pawjy/karasuma-config>.
 
 =head1 LICENSE
 
