@@ -1,13 +1,7 @@
 use strict;
-BEGIN {
-    my $file_name = __FILE__; $file_name =~ s{[^/\\]+$}{}; $file_name ||= '.';
-    $file_name .= '/../config/perl/libs.txt';
-    if (-f $file_name) {
-        open my $file, '<', $file_name or die "$0: $file_name: $1";
-        unshift @INC, split /:/, <$file>;
-    }
-}
 use warnings;
+use Path::Tiny;
+use lib glob path (__FILE__)->parent->parent->child ('t_deps/modules/*/lib');
 use Karasuma::Config::Web::ServerStatus;
 use Test::X1;
 use Test::More;
@@ -23,6 +17,10 @@ use File::Temp;
 
     sub send_plain_text {
         $_[0]->{status_code} = 200;
+    }
+
+    sub throw {
+        #
     }
 
     sub throw_error {

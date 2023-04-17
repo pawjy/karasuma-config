@@ -4,3 +4,6 @@
 /Makefile.setupenv
 /config/perl/libs.txt
 /local/
+/plackup
+/cin
+/deps/
