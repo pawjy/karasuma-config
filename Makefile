@@ -1,43 +1,45 @@
-all:
-
-# ------ Setup ------
+all: deps
 
 WGET = wget
 GIT = git
-PERL = perl
-PERL_VERSION = latest
-PERL_PATH = $(abspath local/perlbrew/perls/perl-$(PERL_VERSION)/bin)
 
-PMB_PMTAR_REPO_URL =
-PMB_PMPP_REPO_URL = 
+updatenightly: local/bin/pmbp.pl
+	$(CURL) -s -S -L -f https://gist.githubusercontent.com/wakaba/34a71d3137a52abb562d/raw/gistfile1.txt | sh
+	$(GIT) add modules t_deps/modules
+	perl local/bin/pmbp.pl --update
+	$(GIT) add config
+	$(CURL) -sSLf https://raw.githubusercontent.com/wakaba/ciconfig/master/ciconfig | RUN_GIT=1 REMOVE_UNUSED=1 perl
 
-Makefile-setupenv: Makefile.setupenv
-	$(MAKE) --makefile Makefile.setupenv setupenv-update \
-	    SETUPENV_MIN_REVISION=20120337
+# ------ Setup ------
 
-Makefile.setupenv:
-	$(WGET) -O $@ https://raw.github.com/wakaba/perl-setupenv/master/Makefile.setupenv
-
-lperl lplackup lprove local-perl perl-version perl-exec \
-pmb-install pmb-update local-submodules \
-cinnamon: %: Makefile-setupenv
-	$(MAKE) --makefile Makefile.setupenv $@ \
-	    PMB_PMTAR_REPO_URL=$(PMB_PMTAR_REPO_URL) \
-	    PMB_PMPP_REPO_URL=$(PMB_PMPP_REPO_URL)
+deps: git-submodules pmbp-install
 
 git-submodules:
 	$(GIT) submodule update --init
 
-deps: local-submodules pmb-install
+PMBP_OPTIONS=
+
+local/bin/pmbp.pl:
+	mkdir -p local/bin
+	$(CURL) -s -S -L https://raw.githubusercontent.com/wakaba/perl-setupenv/master/bin/pmbp.pl > $@
+pmbp-upgrade: local/bin/pmbp.pl
+	perl local/bin/pmbp.pl $(PMBP_OPTIONS) --update-pmbp-pl
+pmbp-update: git-submodules pmbp-upgrade
+	perl local/bin/pmbp.pl $(PMBP_OPTIONS) --update
+pmbp-install: pmbp-upgrade
+	perl local/bin/pmbp.pl $(PMBP_OPTIONS) --install \
+            --create-perl-command-shortcut @perl \
+            --create-perl-command-shortcut @prove
 
 # ------ Tests ------
 
-PERL_ENV = PATH="$(abspath local/perl-$(PERL_VERSION)/pm/bin):$(PERL_PATH):$(PATH)" PERL5LIB="$(shell cat config/perl/libs.txt)"
-PROVE = prove
+PROVE = ./prove
 
 test: test-deps test-main
 
 test-deps: deps
 
 test-main:
-	$(PERL_ENV) $(PROVE) t/*.t
+	$(PROVE) t/*.t
+
+## License: Public Domain.
